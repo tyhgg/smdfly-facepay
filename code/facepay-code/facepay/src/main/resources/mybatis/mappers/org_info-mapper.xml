@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.OrgInfoMapper">
+	<!-- 查询组织信息 -->
+	<select id="queryOrgInfo" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity"
+		resultType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		SELECT id as id,
+			org_id as orgId,
+			specific_id as specificId,
+			super_org_id as superOrgId,
+			org_name as orgName,
+			org_level as orgLevel,
+			pid as pid,
+			org_status as orgStatus,
+			is_child as isChild,
+			sort_id as sortId
+		FROM b_org
+		WHERE 1 = 1
+		<if test="id != null and id != 0">
+			AND id = #{id}
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+	</select>
+
+	<!-- 查询组织列表信息 -->
+	<select id="queryOrgInfoList" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity"
+		resultType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		SELECT id as id,
+			org_id as orgId,
+			specific_id as specificId,
+			super_org_id as superOrgId,
+			org_name as orgName,
+			org_level as orgLevel,
+			pid as pid,
+			org_status as orgStatus,
+			is_child as isChild,
+			sort_id as sortId
+		FROM b_org
+		WHERE 1 = 1
+		<if test="orgName != null and orgName != '' ">
+			AND org_name like "%"#{orgName}"%"
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+		<if test="pid != null and pid != '' ">
+			AND pid = #{pid}
+		</if>
+		<if test="orgLevel != null and orgLevel != 0 ">
+			AND org_level = ${orgLevel}
+		</if>
+		<if test="isChild != null and isChild != '' ">
+			AND is_child = #{isChild}
+		</if>
+		<if test="orgStatus != null and orgStatus != '' ">
+			AND org_status = #{orgStatus}
+		</if>
+		<if test="superOrgId != null and superOrgId != '' ">
+			AND super_org_id = #{superOrgId}
+		</if>
+		order by sort_id
+	</select>
+
+	<!-- 查询组织列表总个数 -->
+	<select id="queryOrgInfoPageCount" parameterType="com.tyhgg.asr.system.entity.OrgInfoPageEntity"
+		resultType="int">
+		SELECT count(1) 
+		FROM b_org
+		WHERE 1 = 1
+		<if test="orgName != null and orgName != '' ">
+			AND org_name like "%"#{orgName}"%"
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+		<if test="pid != null and pid != '' ">
+			AND pid = #{pid}
+		</if>
+		<if test="orgLevel != null and orgLevel != 0 ">
+			AND org_level = ${orgLevel}
+		</if>
+		<if test="isChild != null and isChild != 0 ">
+			AND is_child = #{isChild}
+		</if>
+		<if test="orgStatus != null and orgStatus != '' ">
+			AND org_status = #{orgStatus}
+		</if>
+		<if test="superOrgId != null and superOrgId != '' ">
+			AND super_org_id = #{superOrgId}
+		</if>
+	</select>
+
+	<!-- 查询组织列表分页信息 -->
+	<select id="queryOrgInfoPageList" parameterType="com.tyhgg.asr.system.entity.OrgInfoPageEntity"
+		resultType="com.tyhgg.asr.system.entity.OrgInfoPageEntity">
+		SELECT id as id,
+			org_id as orgId,
+			org_name as orgName,
+			org_level as orgLevel,
+			pid as pid,
+			org_status as orgStatus,
+			is_child as isChild,
+			sort_id as sortId
+		FROM b_org
+		WHERE 1 = 1
+		<if test="orgName != null and orgName != '' ">
+			AND org_name like "%"#{orgName}"%"
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+		<if test="pid != null and pid != '' ">
+			AND pid = #{pid}
+		</if>
+		<if test="orgLevel != null and orgLevel != 0 ">
+			AND org_level = ${orgLevel}
+		</if>
+		<if test="isChild != null and isChild != 0 ">
+			AND is_child = #{isChild}
+		</if>
+		<if test="orgStatus != null and orgStatus != '' ">
+			AND org_status = #{orgStatus}
+		</if>
+		<if test="superOrgId != null and superOrgId != '' ">
+			AND super_org_id = #{superOrgId}
+		</if>
+		order by sort_id
+		limit ${startIndex}, ${pageSize}
+	</select>
+
+  	<resultMap type="java.util.HashMap" id="resultOrgListMap">
+  		<result column="orgId" property="orgId" jdbcType="VARCHAR"/>
+  		<result column="orgName" property="orgName" jdbcType="VARCHAR"/>
+  		<result column="pid" property="pid" jdbcType="VARCHAR"/>
+  		<result column="orgLevel" property="orgLevel" jdbcType="VARCHAR"/>
+  		<result column="isChild" property="isChild" jdbcType="VARCHAR"/>
+  		<result column="specificId" property="specificId" jdbcType="VARCHAR"/>
+  		<result column="superOrgId" property="superOrgId" jdbcType="VARCHAR"/>
+  		<result column="sortId" property="sortId" jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<select id="queryOrgListByPid" parameterType="java.util.HashMap" resultMap="resultOrgListMap" >
+  		SELECT orgId,orgName,pid,orgLevel,isChild,sortId,specificId,superOrgId 
+  		FROM (
+		(
+			SELECT b2.org_id orgId,b2.org_name orgName,b2.pid pid,
+				b2.org_level orgLevel,b2.is_child isChild,b2.sort_id sortId,
+				b2.specific_id specificId ,b2.super_org_id superOrgId 
+			FROM b_org b2 WHERE 1 = 1
+			<if test="pid != null and pid != '' ">
+				AND b2.org_id = #{pid}
+			</if>
+			)
+		UNION
+		(
+			SELECT b2.org_id orgId,b2.org_name orgName,b2.pid pid,
+				b2.org_level orgLevel,b2.is_child isChild,b2.sort_id sortId,
+				b2.specific_id specificId ,b2.super_org_id superOrgId
+			FROM b_org b2 WHERE 1 = 1
+			<if test="pid != null and pid != '' ">
+				AND b2.pid = #{pid}
+			</if>
+			)
+		) a
+		order by sortId
+  	</select>
+  	
+	<!-- 查询组织列表信息 -->
+	<select id="queryOrgInfoListForRole" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity"
+		resultType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		SELECT id as id,
+			org_id as orgId,
+			org_name as orgName,
+			org_level as orgLevel,
+			pid as pid,
+			org_status as orgStatus,
+			is_child as isChild,
+			sort_id as sortId
+		FROM b_org
+		WHERE org_id in (select distinct org_id from people )
+		<if test="orgName != null and orgName != '' ">
+			AND org_name like "%"#{orgName}"%"
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+		<if test="pid != null and pid != '' ">
+			AND pid = #{pid}
+		</if>
+		<if test="orgLevel != null and orgLevel != 0 ">
+			AND org_level = #{orgLevel}
+		</if>
+		<if test="isChild != null and isChild != '' ">
+			AND is_child = #{isChild}
+		</if>
+		<if test="orgStatus != null and orgStatus != '' ">
+			AND org_status = #{orgStatus}
+		</if>
+		<if test="superOrgId != null and superOrgId != '' ">
+			AND super_org_id = #{superOrgId}
+		</if>
+		order by sort_id
+	</select>
+
+  <select id="getFirstOrgTreeList" resultType="java.util.Map">
+    select  concat('o',org_id) as id, org_id as orgId, org_name as text,'closed' as state
+    from b_org 
+    where org_level='1'
+    ORDER BY sort_id
+  </select>
+  
+  <select id="getFirstOrgTreeOpenList" resultType="java.util.Map">
+    select  concat('o',org_id) as id, org_id as orgId, org_name as text
+    from b_org 
+    where org_level='1'
+    ORDER BY sort_id
+  </select>
+  
+  <select id="getSonOrgTreeList"  parameterType="java.lang.String" resultType="java.util.Map">
+    select concat('o',org_id) as id, org_id as orgId, org_name as text,'closed' as state
+    from b_org 
+    where pid= #{_parameter}
+    ORDER BY sort_id
+  </select> 
+ 
+  <select id="getSonOrgTreeOpenList"  parameterType="java.lang.String" resultType="java.util.Map">
+    select   concat('o',org_id) as id, org_id as orgId, org_name as text
+    from b_org 
+    where pid= #{_parameter}
+    ORDER BY sort_id asc
+  </select>
+ 
+	<!-- 查询本级别机构最大的sortId -->
+	<select id="queryMaxSortId" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity"
+		resultType="java.lang.Integer">
+		SELECT  IF (count(1) = 0, 1, max(sort_id))
+		FROM b_org
+		WHERE 1 = 1
+		<if test="pid != null and pid != '' ">
+			AND pid = #{pid}
+		</if>
+		<if test="orgLevel != null and orgLevel != 0 ">
+			AND org_level = ${orgLevel}
+		</if>
+	</select>
+
+	<!-- 更新用户sortId -->
+	<update id="updateOrgSortId" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		UPDATE b_org
+		SET sort_id = ${sortId},
+		mod_time = CURRENT_TIMESTAMP
+		WHERE org_id = #{orgId}
+	</update>
+
+	<!--新增组织机构信息 -->
+	<insert id="save" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		INSERT INTO b_org (org_id, specific_id, super_org_id, org_name, org_level, pid, is_child, sort_id)
+			VALUES (#{orgId}, #{specificId}, #{superOrgId}, #{orgName}, ${orgLevel}, #{pid}, #{isChild}, ${sortId})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="del" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		DELETE
+		FROM b_org
+		WHERE org_id = #{orgId}
+	</delete>
+
+	<!-- 更新信息 -->
+	<update id="updateOrg" parameterType="com.tyhgg.asr.system.entity.OrgInfoEntity">
+		UPDATE b_org
+		SET org_id = #{orgId},
+			specific_id = #{specificId},
+			super_org_id = #{superOrgId},
+			org_name = #{orgName},
+			sort_id = ${sortId},
+			org_level = ${orgLevel},
+			pid = #{pid},
+			is_child = #{isChild},
+			sort_id = ${sortId},
+			mod_time = CURRENT_TIMESTAMP
+		WHERE org_id = #{orgId}
+	</update>
+
+</mapper>

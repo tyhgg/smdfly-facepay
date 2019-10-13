@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.wechat.mapper.WechatTokenMapper">
+	
+	<!-- 查询用户信息 -->
+	<select id="queryWechatToken" parameterType="java.lang.String"
+		resultType="com.tyhgg.asr.wechat.entity.WechatTokenEntity">
+		SELECT
+			id as id,
+			corp_id as corpId,
+			access_token as accessToken,
+			mod_time as modTime,
+			expires_in as expiresIn
+		FROM wechat_token
+		WHERE corp_id = #{_parameter}
+	</select>
+	
+	<!--新增组织机构信息 -->
+	<insert id="save" parameterType="com.tyhgg.asr.wechat.entity.WechatTokenEntity">
+		INSERT INTO wechat_token (corp_id, access_token, expires_in)
+			VALUES (#{corpId}, #{accessToken}, #{expiresIn})
+	</insert>
+
+	<!-- 删除信息 -->
+	<delete id="del" parameterType="java.lang.String">
+		DELETE
+		FROM wechat_token
+		WHERE corp_id = #{_parameter}
+	</delete>
+
+	<!-- 更新信息 -->
+	<update id="updateWechatToken" parameterType="com.tyhgg.asr.wechat.entity.WechatTokenEntity">
+		UPDATE wechat_token
+		SET access_token = #{accessToken},
+			expires_in = #{expiresIn},
+			mod_time = CURRENT_TIMESTAMP
+		WHERE corp_id = #{corpId}
+	</update>
+	
+</mapper>

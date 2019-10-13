@@ -1,0 +1,11 @@
+source mini_create_table.sql;
+source b_country_insert.sql;
+source b_module_menu_insert.sql;
+source b_msg_insert.sql;
+source b_nation_insert.sql;
+source b_org_insert.sql;
+source b_role_insert.sql;
+source b_tran_insert.sql;
+source b_tran_userid_check_insert.sql;
+source people_insert.sql;
+source system_properties_insert.sql;

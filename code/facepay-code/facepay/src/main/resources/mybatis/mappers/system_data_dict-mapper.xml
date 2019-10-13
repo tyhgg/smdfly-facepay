@@ -1,0 +1,21 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.SystemDataDictMapper">
+	<select id="queryCountryInfoList"
+		parameterType="java.lang.String"
+		resultType="com.tyhgg.asr.system.entity.CountryInfoEntity">
+		SELECT  country_id	AS	countryId,
+				country_name   AS  countryName
+		FROM b_country
+		order by convert(country_name using gbk)
+	</select>
+	
+	<select id="queryNationInfoList"
+		parameterType="java.lang.String"
+		resultType="com.tyhgg.asr.system.entity.NationInfoEntity">
+		SELECT  nation_id	AS	nationId,
+				nation_name   AS  nationName
+		FROM b_nation
+		order by convert(nation_name using gbk)
+	</select>
+	
+</mapper>

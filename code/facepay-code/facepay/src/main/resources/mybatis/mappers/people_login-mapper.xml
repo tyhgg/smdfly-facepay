@@ -1,0 +1,104 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.PeopleLoginMapper">
+ 
+ <!--新增信息 -->
+ <insert id="save"
+	parameterType="com.tyhgg.asr.system.entity.PeopleLoginEntity">
+   	INSERT INTO people_login (user_id, client_id, login_type, session_id, 
+		open_id, union_id, access_token, refresh_token,expires_in,
+		login_time, timeout_time, login_status, login_count)
+    VALUES (#{userId}, #{clientId}, #{loginType}, #{sessionId}, 
+   		#{openId}, #{unionId}, #{accessToken}, #{refreshToken}, #{expiresIn},
+   		#{loginTime}, #{timeoutTime}, #{loginStatus}, ${loginCount})
+ </insert>
+ 
+ <!-- 查询信息 -->
+ <select id="queryPeopleLoginEntity"
+   parameterType="com.tyhgg.asr.system.entity.PeopleLoginEntity"
+   resultType="com.tyhgg.asr.system.entity.PeopleLoginEntity">
+   SELECT 	id as id,
+   			user_id as userId,
+   			client_id as clientId,
+   			login_type as loginType,
+   			session_id as sessionId,
+   			open_id as openId,
+   			union_id as unionId,
+   			access_token as accessToken,
+   			refresh_token as refreshToken,
+   			expires_in as expiresIn,
+   			login_time   as loginTime,
+   			timeout_time as timeoutTime,
+   			login_status as loginStatus,
+   			login_count   as loginCount
+   FROM  people_login
+   WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="clientId != null and clientId != '' ">
+			AND client_id = #{clientId}
+		</if>
+		<if test="openId != null and openId != '' ">
+			AND open_id = #{openId}
+		</if>
+		<if test="unionId != null and unionId != '' ">
+			AND union_id = #{unionId}
+		</if>
+  </select>
+ 
+ <!-- 查询信息 -->
+ <select id="queryPeopleLoginList"
+   parameterType="com.tyhgg.asr.system.entity.PeopleLoginEntity"
+   resultType="com.tyhgg.asr.system.entity.PeopleLoginEntity">
+   SELECT user_id as userId
+   FROM  people_login
+   WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="clientId != null and clientId != '' ">
+			AND client_id = #{clientId}
+		</if>
+		<if test="openId != null and openId != '' ">
+			AND open_id = #{openId}
+		</if>
+		<if test="unionId != null and unionId != '' ">
+			AND union_id = #{unionId}
+		</if>
+  </select>
+ 
+ <!-- 更新信息 -->
+ <update id="updatePeopleLoginEntity"
+	parameterType="com.tyhgg.asr.system.entity.PeopleLoginEntity">
+	UPDATE people_login
+	SET login_type = #{loginType},
+	    session_id = #{sessionId},
+	    login_time = #{loginTime},
+	    access_token = #{accessToken},
+	    refresh_token = #{refreshToken},
+	    expires_in = #{expiresIn},
+	    timeout_time = #{timeoutTime},
+	    login_status = #{loginStatus},
+	    login_count = ${loginCount}
+	WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="clientId != null and clientId != '' ">
+			AND client_id = #{clientId}
+		</if>
+		<if test="openId != null and openId != '' ">
+			AND open_id = #{openId}
+		</if>
+  </update>
+    
+  <!-- 更新信息 -->
+  <update id="unlockPeoplePass"
+	parameterType="java.lang.String">
+	UPDATE people_login
+	SET 
+	    fail_count = 0
+	WHERE user_id = #{_parameter}
+  </update>
+    
+</mapper>

@@ -1,0 +1,70 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.core.framework.mapper.SystemLogMapper">
+	
+	<!-- 保存系统日志记录 -->
+	<insert id="save"
+			parameterType="com.tyhgg.core.framework.entity.SystemLogEntity">
+			INSERT INTO 
+				system_log(sys_date, uuid, user_id, client_id, begin_time, 
+				end_time, duration, service_ip, client_ip, tran_url, 
+				tran_name, tran_code, error_code, error_message, 
+				backsys_begin_time, backsys_end_time, backsys_duration, 
+				http_header,http_body, resp_message)
+			VALUES 
+			(
+				#{sysDate,jdbcType=TIMESTAMP},#{uuid},#{userId},#{clientId},
+				#{beginTime,jdbcType=TIMESTAMP},#{endTime,jdbcType=TIMESTAMP},${duration},
+				#{serviceIp},#{clientIp},#{tranUrl},#{tranName},#{tranCode},
+				#{errorCode},#{errorMessage},
+				#{backsysBeginTime,jdbcType=TIMESTAMP},#{backsysEndTime,jdbcType=TIMESTAMP},${backsysDuration},
+				#{httpHeader},#{httpBody},#{respMessage}
+			)
+	</insert>
+	
+	<!-- 查询系统日志记录列表  -->
+	<select id="querySystemLog"  parameterType="com.tyhgg.core.framework.entity.SystemLogEntity" 
+	    resultType="com.tyhgg.core.framework.entity.SystemLogEntity">
+		select 
+			id,
+			Date_format(sys_date,'%Y-%m-%d') AS systemDate,
+			uuid,
+			user_id AS userId,
+			client_id AS clientId,
+			Date_format(begin_time,'%Y-%m-%d %H:%i:%s') AS startTime,
+			Date_format(end_time,'%Y-%m-%d %H:%i:%s') AS finallyTime,
+			duration,
+			service_ip AS serviceIp,
+			client_ip AS clientIp,
+			tran_url AS tranUrl,
+			tran_name AS tranName,
+			tran_code AS tranCode,
+			backsys_begin_time AS backSystemStartTime,
+			backsys_end_time AS backSystemFinallyTime,
+			backsys_duration AS backsysDuration,
+			error_code AS errorCode,
+			error_message AS errorMessage,
+			http_header AS httpHeader,
+			http_body AS httpBody,
+			resp_message AS respMessage
+				from system_log
+					WHERE
+						1 = 1
+						<if test="userId != null and userId !=''">
+					        and user_id = #{userId}
+					    </if>
+					    <if test="tranUrl != null and tranUrl !=''">
+					        and tran_url = #{tranUrl}
+					    </if>
+					    <if test="errorCode != null and errorCode !=''">
+					        and error_code = #{errorCode}
+					    </if>
+					    <if test="systemDate != null and systemDate !=''">
+					        and Date_format(sys_date,'%Y-%m-%d') = #{systemDate}
+					    </if>	    
+		ORDER BY begin_time desc
+		<if test="logNum != null and logNum > 0 ">
+	        limit #{logNum}
+	    </if>
+    </select>
+	
+</mapper>

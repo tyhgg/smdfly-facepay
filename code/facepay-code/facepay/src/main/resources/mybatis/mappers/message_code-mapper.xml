@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.MessageCodeMapper">
+
+  <delete id="deleteMessageCode" parameterType="java.lang.String">
+  	delete from b_validate_code where people_tel = #{_parameter} and valid_date <![CDATA[<]]> now()
+  </delete>
+       
+  <insert id="insertMessageCode" parameterType="com.tyhgg.asr.system.entity.MessageCodeEntity">
+  	insert into b_validate_code (user_id, people_tel, valid_code, valid_date, code_type) 
+  		values (#{userId}, #{peopleTel}, #{validCode}, ADDDATE(NOW(), interval #{minutes} minute), #{codeType}) 
+  </insert>
+  
+  <update id="updateMessageNum" parameterType="com.tyhgg.asr.system.entity.MessageCodeEntity">
+  	update b_validate_code set valid_num = valid_num+1, mod_time = CURRENT_TIMESTAMP
+  	where people_tel = #{peopleTel} and valid_code = #{validCode}
+  </update>
+  
+  <select id="queryMessageCode" parameterType="com.tyhgg.asr.system.entity.MessageCodeEntity" 
+  	resultType="com.tyhgg.asr.system.entity.MessageCodeEntity">
+  	select people_tel as peopleTel, valid_code as validCode, 
+  		valid_date as validDate, valid_num as validNum
+    from b_validate_code
+    where people_tel = #{peopleTel} and valid_code = #{validCode}
+  </select>
+  
+  <update id="queryRecentMessageCodeCount" parameterType="java.lang.String" >
+  	select count(1) as cc
+    from b_validate_code
+    where people_tel = #{_parameter} and valid_date <![CDATA[ > ]]> NOW()
+  </update>
+  
+  <select id="queryMessageCodeList" parameterType="com.tyhgg.asr.system.entity.MessageCodeEntity" 
+  	resultType="com.tyhgg.asr.system.entity.MessageCodeEntity">
+  	select people_tel as peopleTel, valid_code as validCode
+    from b_validate_code
+    where people_tel = #{peopleTel} and valid_num <![CDATA[<]]> 1 and valid_date <![CDATA[<=]]> now() 
+  </select>
+	
+</mapper>

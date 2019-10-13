@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.PeopleMapper">
+	<!-- 查询用户信息 -->
+	<select id="queryPeople" parameterType="com.tyhgg.asr.system.entity.PeopleEntity"
+		resultType="com.tyhgg.asr.system.entity.PeopleEntity">
+		SELECT
+			p.id as id,
+			p.user_id as userId,
+			p.sort_id as sortId,
+			p.people_name as peopleName,
+			p.people_idtype as peopleIdtype,
+			p.people_idno as peopleIdno,
+			p.country as country,
+			p.province as province,
+			p.city as city,
+			p.headimg_url as headimgUrl,
+			p.title_id as titleId,
+			p.birthday as birthday,
+			p.address as address,
+			p.people_sex as peopleSex,
+			p.people_tel as peopleTel,
+			p.people_phone as peoplePhone,
+			p.people_status as peopleStatus,
+			p.org_id as orgId
+		FROM people p
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND p.user_id = #{userId}
+		</if>
+		<if test="peopleName != null and peopleName != '' ">
+			AND p.people_name = #{peopleName}
+		</if>
+		<if test="peopleTel != null and peopleTel != '' ">
+			AND p.people_tel = #{peopleTel}
+		</if>
+	</select>
+	
+	<!-- 查询用户信息 -->
+	<select id="queryPeopleByUserId" parameterType="java.lang.String"
+		resultType="com.tyhgg.asr.system.entity.PeopleEntity">
+		SELECT
+			p.id as id,
+			p.user_id as userId,
+			p.sort_id as sortId,
+			p.people_name as peopleName,
+			p.people_idtype as peopleIdtype,
+			p.people_idno as peopleIdno,
+			p.country as country,
+			p.province as province,
+			p.city as city,
+			p.headimg_url as headimgUrl,
+			p.title_id as titleId,
+			p.birthday as birthday,
+			p.address as address,
+			p.people_sex as peopleSex,
+			p.people_tel as peopleTel,
+			p.people_phone as peoplePhone,
+			p.people_status as peopleStatus,
+			p.org_id as orgId
+		FROM people p
+		WHERE user_id = #{_parameter}
+	</select>
+
+	<!-- 查询用户信息 -->
+	<select id="queryPeopleList" parameterType="com.tyhgg.asr.system.entity.PeopleEntity"
+		resultType="com.tyhgg.asr.system.entity.PeopleEntity">
+		SELECT
+			p.id as id,
+			p.user_id as userId,
+			p.sort_id as sortId,
+			p.people_name as peopleName,
+			p.people_idtype as peopleIdtype,
+			p.people_idno as peopleIdno,
+			p.country as country,
+			p.province as province,
+			p.city as city,
+			p.headimg_url as headimgUrl,
+			p.title_id as titleId,
+			p.birthday as birthday,
+			p.address as address,
+			p.people_sex as peopleSex,
+			p.people_tel as peopleTel,
+			p.people_phone as peoplePhone,
+			p.people_status as peopleStatus,
+			p.org_id as orgId
+		FROM people p
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND p.user_id = #{userId}
+		</if>
+		<if test="peopleName != null and peopleName != '' ">
+			AND p.people_name = #{peopleName}
+		</if>
+		<if test="peopleTel != null and peopleTel != '' ">
+			AND p.people_tel = #{peopleTel}
+		</if>
+	</select>
+
+	<!-- 查询用户信息 -->
+	<select id="queryPeopleAndPass" parameterType="com.tyhgg.asr.system.entity.PeopleEntity"
+		resultType="com.tyhgg.asr.system.entity.PeopleEntity">
+		SELECT
+			p.id as id,
+			p.user_id as userId,
+			p.sort_id as sortId,
+			p.people_pass as peoplePass,
+			p.people_name as peopleName,
+			p.people_idtype as peopleIdtype,
+			p.people_idno as peopleIdno,
+			p.country as country,
+			p.province as province,
+			p.city as city,
+			p.headimg_url as headimgUrl,
+			p.title_id as titleId,
+			p.birthday as birthday,
+			p.address as address,
+			p.people_sex as peopleSex,
+			p.people_tel as peopleTel,
+			p.people_phone as peoplePhone,
+			p.people_status as peopleStatus,
+			p.org_id as orgId
+		FROM people p
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND p.user_id = #{userId}
+		</if>
+		<if test="peopleName != null and peopleName != '' ">
+			AND p.people_name = #{peopleName}
+		</if>
+		<if test="peopleTel != null and peopleTel != '' ">
+			AND p.people_tel = #{peopleTel}
+		</if>
+	</select>
+
+
+	<!-- 新增用户信息 -->
+	<insert id="save" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		INSERT INTO people
+		(user_id, sort_id, people_name, people_pass,
+		people_sex, country, province, city, headimg_url, people_idtype,
+		people_idno, title_id, birthday, address,
+		org_id, people_tel,people_phone, rem
+		)
+		VALUES (#{userId}, ${sortId}, #{peopleName},
+		#{peoplePass}, #{peopleSex}, #{country}, #{city}, #{headimgUrl}, #{peopleIdtype}, 
+		#{peopleIdno}, #{titleId}, #{birthday}, #{address},
+		#{orgId}, #{peopleTel},#{peoplePhone}, #{rem}
+		)
+	</insert>
+
+	<!-- 删除用户信息 -->
+	<delete id="delete" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		DELETE
+		FROM people
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+	</delete>
+
+	<!-- 更新用户信息 -->
+	<update id="updatePeopleByPeople" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		UPDATE people
+		SET
+			people_name = #{peopleName},
+			<if test="sortId != null and sortId != 0 ">
+				sort_id = ${sortId},
+			</if>
+			people_sex = #{peopleSex},
+			people_idtype = #{peopleIdtype},
+			people_idno = #{peopleIdno},
+			title_id = #{titleId},
+			birthday = #{birthday},
+			address = #{address},
+			country = #{country},
+			province = #{province},
+			city = #{city},
+			headimgUrl = #{headimgUrl},
+			people_tel = #{peopleTel},
+			people_phone = #{peoplePhone},
+			org_id = #{orgId},
+			rem = #{rem},
+			mod_time = CURRENT_TIMESTAMP
+		WHERE
+		user_id = #{userId}
+	</update>
+
+	<!-- 更新用户状态 -->
+	<update id="updatePeopleStatus" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		UPDATE people
+		SET
+			people_status = #{peopleStatus},
+			mod_time = CURRENT_TIMESTAMP
+		WHERE user_id = #{userId}
+	</update>
+	
+	<!-- 更新用户密码 -->
+	<update id="updatePeoplePass" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		UPDATE people
+		SET
+			people_pass = #{peoplePass},
+			update_pass = '2',
+			mod_time = CURRENT_TIMESTAMP
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 重置用户密码 -->
+	<update id="resetPeoplePass" parameterType="com.tyhgg.asr.system.entity.PeopleEntity">
+		UPDATE people
+		SET
+		people_pass = #{peoplePass},
+		update_pass = '1',
+		mod_time = CURRENT_TIMESTAMP
+		WHERE user_id = #{userId}
+	</update>
+
+	<!-- 查询用户信息 -->
+	<select id="queryPeoplePageCount" parameterType="com.tyhgg.asr.system.entity.PeoplePageEntity"
+		resultType="java.lang.Integer">
+		SELECT COUNT(1)
+		FROM people
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND org_id = #{orgId}
+		</if>
+		<if test="peopleStatus != null and peopleStatus != '' ">
+			AND people_status = ${peopleStatus}
+		</if>
+		<if test="peopleTel != null and peopleTel != '' ">
+			AND people_tel = #{peopleTel}
+		</if>
+		<if test="peopleName != null and peopleName != '' ">
+			AND people_name like "%"#{peopleName}"%"
+		</if>
+	</select>
+
+	<!-- 查询用户信息 -->
+	<select id="queryPeoplePageList" parameterType="com.tyhgg.asr.system.entity.PeoplePageEntity"
+		resultType="com.tyhgg.asr.system.entity.PeoplePageEntity">
+		SELECT pe.id as id,
+			pe.user_id as userId,
+			pe.sort_id as sortId,
+			pe.people_name as peopleName,
+			pe.people_idtype as peopleIdtype,
+			pe.people_idno as peopleIdno,
+			pe.country as country,
+			pe.province as province,
+			pe.city as city,
+			pe.headimg_url as headimgUrl,
+			pe.title_id as titleId,
+			pe.birthday as birthday,
+			pe.address as address,
+			IF(pe.people_sex = '2' , '女', '男') AS peopleSex,
+			pe.people_tel as peopleTel,
+			pe.people_phone as peoplePhone,
+			pe.people_status as peopleStatus,
+			pe.org_id as orgId,
+			bo.org_name as orgName
+		FROM people pe
+			left join b_org bo
+			on pe.org_id = bo.org_id
+		WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND pe.user_id = #{userId}
+		</if>
+		<if test="orgId != null and orgId != '' ">
+			AND pe.org_id = #{orgId}
+		</if>
+		<if test="peopleName != null and peopleName != '' ">
+			AND pe.people_name like "%"#{peopleName}"%"
+		</if>
+		<if test="peopleStatus != null and peopleStatus != '' ">
+			AND people_status = ${peopleStatus}
+		</if>
+		order by convert(people_name using gbk)
+		limit ${startIndex},${pageSize}
+
+	</select>
+
+	<!-- 查询当前用户的组织机构级别 -->
+	<select id="queryOrgLevelByUserId" parameterType="com.tyhgg.asr.system.entity.PeopleEntity"
+		resultType="java.lang.Integer">
+		SELECT bo.`org_level` AS orgLevel
+		FROM people pe,b_org bo
+		WHERE 1 = 1 AND pe.`org_id` = bo.`org_id`
+		<if test="userId != null and userId != '' ">
+			AND pe.user_id= #{userId}
+		</if>
+	</select>
+
+	<!-- 查询没有手机号的用户列表信息 -->
+	<select id="queryPeopleNoTelList" resultType="java.lang.String">
+		SELECT
+			user_id as userId
+		FROM people
+		WHERE people_tel is null or people_tel = ''
+	</select>
+	
+	<!-- 查询所有手机号 -->
+	<select id="queryPeopleTelList" resultType="java.lang.String">
+		SELECT
+			distinct people_tel as peopleTel
+		FROM people
+	</select>
+	
+	<update id="updatePeopleByIdAndPhoneIsNullBatch" parameterType="java.util.List">
+		update people 
+			<trim prefix="set" suffixOverrides=",">
+				<trim prefix="people_tel = case" suffix="end,">
+					<foreach collection="list" item="item" index="index">
+						when user_id = #{item.userId} then #{item.peopleTel}
+					</foreach>	
+				</trim>
+			</trim>
+		 where user_id in 
+		<foreach collection="list" item="people" index="index" separator=", " open="(" close=")">
+			#{people.userId}
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.RoleMapper">
+ 
+ <!-- 查询角色列表信息 -->
+ <select id="queryRoleList"
+    resultType="com.tyhgg.asr.system.entity.RoleEntity">
+   	SELECT 	role_id as roleId,
+   			role_name as roleName,
+   			role_rem as roleRem
+    FROM b_role
+    WHERE 1 = 1 
+	   <if test="roleName != null and roleName != '' ">
+	   	AND  role_name like "%"#{roleName}"%"
+	   </if>
+	   <if test="roleId != null and roleId != '' ">
+	   	AND  role_id = #{roleId}
+	   </if>
+	   <if test="roleIds != null and roleIds != '1'.toString() ">
+	   	AND  role_id != '1'
+	   </if>
+	order by role_id
+ </select>
+  
+  
+ <!-- 查询角色信息 -->
+ <select id="queryRole"
+ 	parameterType="java.lang.String"
+    resultType="com.tyhgg.asr.system.entity.RoleEntity">
+   	SELECT 	role_id as roleId,
+   			role_name as roleName,
+   			role_rem as roleRem
+    FROM b_role
+    WHERE role_id = #{_parameter}
+ </select>
+ 
+ <!--新增信息 -->
+ <insert id="save"
+   parameterType="com.tyhgg.asr.system.entity.RoleEntity">
+   INSERT INTO b_role (role_id, role_name, role_rem)
+   VALUES (#{roleId}, #{roleName}, #{roleRem})
+ </insert>
+ 
+ <!-- 删除信息 -->
+ <delete id="delete"
+   parameterType="java.lang.String">
+   DELETE 
+   FROM b_role
+   WHERE role_id = #{_parameter}
+ </delete>
+ 
+ <!-- 更新信息 -->
+ <update id="updateRole"
+	parameterType="com.tyhgg.asr.system.entity.RoleEntity">
+	UPDATE b_role
+	SET role_name = #{roleName},
+		role_rem  = #{roleRem},
+		mod_time  = CURRENT_TIMESTAMP
+	WHERE role_id = #{roleId}
+  </update>
+   
+ <!-- 查询人员角色 -->
+ <select id="queryPeopleRoleRelList"
+ 	parameterType="com.tyhgg.asr.system.entity.RolePeopleRelEntity"
+    resultType="com.tyhgg.asr.system.entity.RolePeopleRelEntity">
+   	SELECT 	user_id as userId,
+   			role_id as roleId
+    FROM b_role_people_rel
+    WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="roleId != null and roleId != '' ">
+			AND role_id = #{roleId}
+		</if>
+    order by role_id
+ </select>  
+ 
+ <!-- 查询角色人员列表总数 -->
+ <select id="queryRolePeopleRelPageCount"
+ 	parameterType="com.tyhgg.asr.system.entity.RolePeopleRelPageEntity"
+    resultType="int">
+   	SELECT 	count(*)
+    FROM people
+    WHERE user_id in (
+    		select user_id from b_role_people_rel where role_id = #{roleId}
+    	)
+ </select> 
+ <!-- 查询角色人员列表 -->
+ <select id="queryRolePeopleRelPageList"
+ 	parameterType="com.tyhgg.asr.system.entity.RolePeopleRelPageEntity"
+    resultType="com.tyhgg.asr.system.entity.RolePeopleRelPageEntity">
+   	SELECT 	user_id as userId,
+   			people_name as peopleName,
+   			p.org_id as orgId,
+   			bo.org_name as orgName
+    FROM people p left join b_org bo on p.org_id = bo.org_id
+    WHERE user_id in (
+    		select user_id from b_role_people_rel where role_id = #{roleId}
+    	)
+    order by convert(people_name using gbk)
+    limit ${startIndex}, ${pageSize}
+ </select> 
+ 	   
+ <!-- 查询角色人员列表 -->
+ <select id="getUnselectRolePeopleListByRoleId"
+ 	parameterType="com.tyhgg.asr.system.entity.RolePeopleRelEntity"
+    resultType="com.tyhgg.asr.system.entity.RolePeopleRelEntity">
+   	SELECT 	user_id as userId,
+   			people_name as peopleName,
+   			p.org_id as orgId,
+   			bo.org_name as orgName
+    FROM people p left join b_org bo on p.org_id = bo.org_id
+    WHERE user_id not in (
+    		select user_id from b_role_people_rel where role_id = #{roleId}
+    	)
+		<if test="peopleName != null and peopleName != '' ">
+			AND people_name like "%"#{peopleName}"%"
+		</if>
+    order by convert(people_name using gbk)
+    limit 100
+ </select> 
+ 
+ <!-- 删除角色人员 -->
+ <delete id="deleteRolePeopleRel"
+ 	parameterType="com.tyhgg.asr.system.entity.RolePeopleRelEntity">
+   	delete
+    FROM b_role_people_rel
+    WHERE 1 = 1
+		<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}
+		</if>
+		<if test="roleId != null and roleId != '' ">
+			AND role_id = #{roleId}
+		</if>
+ </delete>  
+ 
+ <!--新增角色人员信息 -->
+ <insert id="saveRolePeopleRel"
+   parameterType="com.tyhgg.asr.system.entity.RolePeopleRelEntity">
+   INSERT INTO b_role_people_rel (role_id, user_id)
+   VALUES (#{roleId}, #{userId})
+ </insert>
+ 
+  <!-- 查询角色菜单信息 -->
+  <select id="queryRoleMenuRelStrList" 
+	parameterType="java.lang.String"
+    resultType="java.lang.String">
+	SELECT 	mod_id as modId
+   	FROM b_role_menu_rel
+   	WHERE role_id = #{roleId}	
+  </select>
+	
+ <!-- 删除角色菜单 -->
+ <delete id="deleteRoleMenuRel"
+ 	parameterType="com.tyhgg.asr.system.entity.RoleMenuRelEntity">
+   	delete
+    FROM b_role_menu_rel
+    WHERE 1 = 1
+		<if test="modId != null and modId != 0 ">
+			AND mod_id = #{modId}
+		</if>
+		<if test="roleId != null and roleId != '' ">
+			AND role_id = #{roleId}
+		</if>
+ </delete>  
+ 
+ <!--新增角色权限信息 -->
+ <insert id="saveRoleMenuRel"
+   parameterType="com.tyhgg.asr.system.entity.RoleMenuRelEntity">
+   INSERT INTO b_role_menu_rel (role_id, mod_id)
+   VALUES (#{roleId}, #{modId})
+ </insert>
+ 
+</mapper>

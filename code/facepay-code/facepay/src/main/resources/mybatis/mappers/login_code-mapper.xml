@@ -1,0 +1,58 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.LoginCodeMapper">
+ 
+ <!--新增信息 -->
+ <insert id="save"
+	parameterType="com.tyhgg.asr.system.entity.LoginCodeEntity">
+   	INSERT INTO login_code (user_id, valid_code, valid_num, valid_time)
+    VALUES (#{userId}, #{validCode}, ${validNum}, #{validTime})
+ </insert>
+ 
+ <!-- 查询信息 -->
+ <select id="queryLoginCodeEntity"
+   parameterType="com.tyhgg.asr.system.entity.LoginCodeEntity"
+   resultType="com.tyhgg.asr.system.entity.LoginCodeEntity">
+   SELECT 	user_id as userId,
+   			valid_code as validCode,
+   			valid_num as validNum,
+   			valid_time as validTime
+   FROM  login_code
+   WHERE 1 = 1
+		<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+		</if>
+		<if test="validCode != null and validCode != '' ">
+			AND lower(valid_code) = #{validCode}
+		</if>
+  </select>
+ 
+ <!-- 更新信息 -->
+ <update id="updateLoginCodeEntity"
+	parameterType="com.tyhgg.asr.system.entity.LoginCodeEntity">
+	UPDATE login_code
+	SET user_id = #{userId},
+	    valid_num = ${validNum},
+		mod_time  = CURRENT_TIMESTAMP
+	WHERE valid_code = #{validCode}
+  </update>
+   
+  <update id="updateLoginNum" parameterType="com.tyhgg.asr.system.entity.LoginCodeEntity" >
+	UPDATE login_code
+	SET valid_num = ${validNum},
+		mod_time  = CURRENT_TIMESTAMP
+	WHERE user_id = #{userId}
+  </update>
+  
+  <delete id="deleteLoginCode" parameterType="java.lang.String">
+  	delete 
+  	from login_code
+  	where user_id = #{_parameter}
+  </delete>
+  
+  <delete id="deleteLoginCodeByCode" parameterType="java.lang.String">
+  	delete 
+  	from login_code
+  	where lower(valid_code) = #{_parameter}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.AdminSQLMapper">
+   
+     <select id="customQueryItem"  parameterType="com.tyhgg.asr.system.entity.SqlEntity" resultType="java.util.LinkedHashMap">
+           (select * from 
+                (${sqlContent}) sqltable)
+                limit ${startIndex},${pageSize}
+                
+    </select>
+    
+    <select id="customQueryCount"  parameterType="com.tyhgg.asr.system.entity.SqlEntity" resultType="java.lang.Integer">
+     
+              select count(1)
+                 from  (${sqlContent}) sqltable
+                
+    </select>
+    
+    <select id="sqlExcuteItem"  parameterType="String">
+                ${value}
+    </select>
+    
+</mapper>

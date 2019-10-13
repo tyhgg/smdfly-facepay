@@ -1,0 +1,38 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tyhgg.asr.system.mapper.ModuleMenuMapper">
+	
+  <!-- 查询菜单信息 -->
+  <select id="queryModuleMenuList" 
+	parameterType="com.tyhgg.asr.system.entity.ModuleMenuEntity"
+    resultType="com.tyhgg.asr.system.entity.ModuleMenuEntity">
+	SELECT 	mod_id as modId,
+   			mod_name as modName,
+		    mod_url as modUrl,
+		    mod_vue_url as modVueUrl,
+		  	mod_pid as modPid,
+		  	is_child as isChild,
+		    sort_id as sortId,
+		    mod_status as modStatus,
+		    rem as rem
+   	FROM b_module_menu  
+   	WHERE 1 = 1
+		<if test="modPid != 0 ">
+			AND  mod_pid = ${modPid}
+		</if>
+		<if test="modId != 0 ">
+			AND  mod_id = ${modId}
+		</if>
+	    <if test="modStatus != '' ">
+	        and mod_status = #{modStatus}
+	    </if>
+	    <if test="roleIds != '' and roleIds != '1'.toString() ">
+	        and mod_id in (
+	        	SELECT 	distinct bmm.mod_id 
+			    FROM b_role_menu_rel brmr, b_module_menu bmm
+			    WHERE brmr.mod_id = bmm.mod_id
+			    	and brmr.role_id in ${roleIds} )
+	    </if>
+	 order by sort_id
+  </select>
+
+</mapper>
