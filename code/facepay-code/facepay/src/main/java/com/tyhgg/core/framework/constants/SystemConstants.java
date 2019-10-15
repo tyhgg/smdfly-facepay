@@ -122,4 +122,6 @@ public final class SystemConstants {
 	public static final String XML_COMMA = ",";
 	public static final String XML_NEW_LINE = "\n";
 	
+	public static final String WECHAT_PAY_SUCCESS = "SUCCESS";
+	
 }

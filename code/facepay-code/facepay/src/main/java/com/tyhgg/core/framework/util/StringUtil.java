@@ -31,7 +31,7 @@ import com.tyhgg.core.framework.constants.SystemConstants;
 import com.tyhgg.core.framework.filter.WrapperHttpServletFilter;
 
 public class StringUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(WrapperHttpServletFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtil.class);
     
     private static List<Object[]> xssPatternList = new ArrayList<Object[]>();
     static{

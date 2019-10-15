@@ -1,6 +1,7 @@
 package com.tyhgg.core.framework.util;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,19 +12,22 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 public final class JsonXmlObjConvertUtils {
        
     private  JsonXmlObjConvertUtils() {}
 
     private static ObjectMapper objectMapper = new ObjectMapper();
-//    private static XmlMapper xmlMapper = new XmlMapper();
+    private static XmlMapper xmlMapper = new XmlMapper();
 
     private static Logger logger = LoggerFactory.getLogger(JsonXmlObjConvertUtils.class);
 
@@ -98,25 +102,25 @@ public final class JsonXmlObjConvertUtils {
         return result;
     }
 
-//    /**
-//     * json string convert to xml string
-//     * 
-//     * @throws ControllerException
-//     * 
-//     * @throws IOException
-//     * @throws JsonProcessingException
-//     */
-//    public static String jsonToXml(String jsonStr) {
-//        JsonNode root;
-//        try {
-//            root = objectMapper.readTree(jsonStr);
-//            return xmlMapper.writeValueAsString(root);
-//        } catch (IOException e) {
-//            logger.debug(e.getMessage());
-//            return null;
-//        }
-//
-//    }
+    /**
+     * json string convert to xml string
+     * 
+     * @throws ControllerException
+     * 
+     * @throws IOException
+     * @throws JsonProcessingException
+     */
+    public static String jsonToXml(String jsonStr) {
+        JsonNode root;
+        try {
+            root = objectMapper.readTree(jsonStr);
+            return xmlMapper.writeValueAsString(root);
+        } catch (IOException e) {
+            logger.debug(e.getMessage());
+            return null;
+        }
+
+    }
 
     /**
      * map convert to xml string
@@ -163,18 +167,18 @@ public final class JsonXmlObjConvertUtils {
      * 
      * @throws IOException
      */
-//    public static String xmlToJson(String xml) throws 
-//            IOException {
-//        StringWriter w = new StringWriter();
-//        JsonParser jp = xmlMapper.getFactory().createParser(xml);
-//        JsonGenerator jg = objectMapper.getFactory().createGenerator(w);
-//        while (jp.nextToken() != null) {
-//            jg.copyCurrentEvent(jp);
-//        }
-//        jp.close();
-//        jg.close();
-//        return w.toString();
-//    }
+    public static String xmlToJson(String xml) throws 
+            IOException {
+        StringWriter w = new StringWriter();
+        JsonParser jp = xmlMapper.getFactory().createParser(xml);
+        JsonGenerator jg = objectMapper.getFactory().createGenerator(w);
+        while (jp.nextToken() != null) {
+            jg.copyCurrentEvent(jp);
+        }
+        jp.close();
+        jg.close();
+        return w.toString();
+    }
 
     /**
      * javaBean,list,array convert to json string

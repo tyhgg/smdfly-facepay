@@ -13,12 +13,12 @@ public class PropertiesFileUtils {
 
 	// 只实例化一次system.properties
     static{
-    	systemProperties = readPropertiesFile("application.properties");
+    	systemProperties = readPropertiesFile("system.properties");
     }
 	
     public static Properties getSystemProperties() {
     	if(null == systemProperties){
-    		systemProperties = readPropertiesFile("application.properties");
+    		systemProperties = readPropertiesFile("system.properties");
     	}
         return systemProperties;
     }

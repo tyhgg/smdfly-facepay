@@ -51,7 +51,7 @@ public class DateUtil {
 	 * @param formatStr
 	 * @return
 	 */
-	public static int dateBetweenMillisecond(java.sql.Timestamp beginTime, java.sql.Timestamp endTime) {
+	public static int dateBetweenMilliSecond(java.sql.Timestamp beginTime, java.sql.Timestamp endTime) {
 		if (null == beginTime || null == endTime) {
 			return 0;
 		}

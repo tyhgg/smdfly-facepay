@@ -16,7 +16,7 @@ insert into `system_properties`(`sys_key`,`sys_value`,`rem`)
 insert into `system_properties`(`sys_key`,`sys_value`,`rem`) 
     values ('sys.ftp.url','','ftp服务器地址');
 insert into `system_properties`(`sys_key`,`sys_value`,`rem`) 
-    values ('sys.server.url','http://22.188.14.160:7788,http://22.188.14.76:8080','后台服务的地址');
+    values ('sys.server.url','http://22.188.14.160:7788,http://22.188.14.76:8080','后台服务的地址,多个地址用,号隔开');
 delete from system_properties where sys_key = 'system.url';
 insert into system_properties (sys_key, sys_value, rem) values('system.url','http://22.188.14.160:7788/book/','系统地址');
 

@@ -1,7 +1,7 @@
 package com.tyhgg.core.framework.exception;
 
 /**
- * 错误码
+ * 	错误码
  * @类名称: ExceptionCode
  * @类描述: 
  * @创建人：zyt5668
